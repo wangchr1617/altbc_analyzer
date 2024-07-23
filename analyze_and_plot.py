@@ -6,7 +6,7 @@ import pandas as pd
 import sys
 import time
 from scipy.stats import gaussian_kde
-from altbc_analyzer import ALTBC_Analyzer
+from altbc_analyzer.altbc_analyzer import ALTBC_Analyzer
 
 def analyze_file(filename, filetype='POSCAR', cutoff=4.0, theta_min=155, theta_max=180, frame_interval=10):
     """

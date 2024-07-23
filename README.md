@@ -41,12 +41,8 @@ project/
    git clone https://github.com/wangchr1617/altbc_analyzer.git
    cd altbc_analyzer
    ```
-2. 创建并激活虚拟环境（可选）：
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # 在Windows上使用 venv\Scripts\activate
-   ```
-3. 安装项目依赖：
+
+2. 安装项目依赖：
    ```bash
    pip install -r requirements.txt
    ```
@@ -55,8 +51,8 @@ project/
 ### 分析和绘图
 在项目根目录下运行`analyze_and_plot.py`文件来进行分析和绘图。以下是主要的函数和它们的功能：
 
-- `analyze_file(filename, filetype='POSCAR', cutoff=4.0, theta_min=155, theta_max=180, frame_interval=10)`：分析指定的文件类型，并计算原子三元组的几何性质。
-- `plot_results(df, plot_type='scatter')`：根据分析结果绘制散点图或密度图。
+- `analyze_file(filename, filetype='POSCAR', cutoff=4.0, theta_min=155, theta_max=180, frame_interval=10)`：分析指定的文件类型，并计算结构文件的ALTBC。
+- `plot_results(df, plot_type='scatter')`：根据分析结果绘制散点图或核密度图。
 
 ### 示例
 以下是一个运行示例：
@@ -68,7 +64,7 @@ python analyze_and_plot.py
 
 ## 示例代码片段
 ```python
-from altbc_analyzer import ALTBC_Analyzer
+from altbc_analyzer.altbc_analyzer import ALTBC_Analyzer
 from ase.io import read
 import matplotlib.pyplot as plt
 
