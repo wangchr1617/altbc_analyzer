@@ -1,7 +1,7 @@
 import math
 import numpy as np
 import pandas as pd
-from neighbor_list import NeighborList
+from .neighbor_list import NeighborList
 
 class ALTBC_Analyzer:
     

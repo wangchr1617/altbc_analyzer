@@ -8,20 +8,29 @@ ALTBC Analyzer 是一个用于计算硫族相变存储材料晶体结构中角�
 ## 文件结构
 ```
 project/
-│
-├── altbc_analyzer/
-│   ├── __init__.py
-│   ├── altbc_analyzer.py
-│   └── neighbor_list.py
-│
+├── altbc_analyzer
+│   ├── altbc_analyzer.py
+│   ├── __init__.py
+│   ├── neighbor_list.py
+│   └── __pycache__
+│       ├── altbc_analyzer.cpython-39.pyc
+│       ├── __init__.cpython-39.pyc
+│       └── neighbor_list.cpython-39.pyc
 ├── analyze_and_plot.py
-└── requirements.txt
+├── example
+│   └── POSCAR
+├── LICENSE
+├── README.md
+├── requirements.txt
+├── setup.py
+├── upload_pypi.sh
+└── upload_pypi_test.sh
 ```
 
 ### 文件说明
 - `altbc_analyzer/` 目录下包含了主要的计算和分析逻辑：
   - `altbc_analyzer.py`：定义了`ALTBC_Analyzer`类，用于计算ALTBC。
-  - `neighbor_list.py`：定义了`NeighborList`类，用于生成邻居列表。
+  - `neighbor_list.py`：定义了`NeighborList`类，用于生成近邻列表。
   - `__init__.py`：使得该目录可以作为Python模块导入。
 - `analyze_and_plot.py`：包含文件分析、数据处理和绘图的主函数。
 - `requirements.txt`：列出了项目所需的Python库。
