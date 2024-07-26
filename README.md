@@ -1,5 +1,5 @@
 
-# altbc_analyzer
+# Altbc_analyzer
 
 ## 项目简介
 ALTBC Analyzer 是一个用于计算硫族相变存储材料晶体结构中角度限制的三体关联函数（the angular-limited three-body correlation, ALTBC）的工具。
@@ -11,11 +11,7 @@ project/
 ├── altbc_analyzer
 │   ├── altbc_analyzer.py
 │   ├── __init__.py
-│   ├── neighbor_list.py
-│   └── __pycache__
-│       ├── altbc_analyzer.cpython-39.pyc
-│       ├── __init__.cpython-39.pyc
-│       └── neighbor_list.cpython-39.pyc
+│   └── neighbor_list.py
 ├── analyze_and_plot.py
 ├── example
 │   └── POSCAR
@@ -26,14 +22,6 @@ project/
 ├── upload_pypi.sh
 └── upload_pypi_test.sh
 ```
-
-### 文件说明
-- `altbc_analyzer/` 目录下包含了主要的计算和分析逻辑：
-  - `altbc_analyzer.py`：定义了`ALTBC_Analyzer`类，用于计算ALTBC。
-  - `neighbor_list.py`：定义了`NeighborList`类，用于生成近邻列表。
-  - `__init__.py`：使得该目录可以作为Python模块导入。
-- `analyze_and_plot.py`：包含文件分析、数据处理和绘图的主函数。
-- `requirements.txt`：列出了项目所需的Python库。
 
 ## 安装步骤
 1. 克隆本项目到本地：
@@ -85,7 +73,7 @@ if __name__ == "__main__":
 - 确保输入文件的路径和文件名正确。
 
 ## 贡献
-欢迎提交Issue和Pull Request来改进本项目。如果有任何问题或建议，请联系项目维护者。
+欢迎提交 Issue 和 Pull Request 来改进本项目。如果有任何问题或建议，请联系项目维护者[邮箱](wangchr1617@gmail.com)。
 
 ## 许可证
 本项目基于MIT许可证开源，详情请参阅LICENSE文件。
