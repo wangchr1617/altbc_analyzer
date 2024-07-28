@@ -1,56 +1,58 @@
 
 # Altbc_analyzer
 
-## 项目简介
-ALTBC Analyzer 是一个用于计算硫族相变存储材料晶体结构中角度限制的三体关联函数（the angular-limited three-body correlation, ALTBC）的工具。
-该项目使用 ASE 库读取结构文件，并使用近邻列表线性标度算法降低计算量。
+## Project Overview
+ALTBC Analyzer is a Python library for calculating the angular-limited three-body correlation (ALTBC) function in the crystal structure of chalcogenide phase change materials.
+This project uses the ASE library to read structure files and employs a linear scaling algorithm with neighbor lists to reduce computation.
 
-## 文件结构
+## File Structure
 ```
 project/
 ├── altbc_analyzer
-│   ├── altbc_analyzer.py
-│   ├── __init__.py
-│   └── neighbor_list.py
+│   ├── altbc_analyzer.py
+│   ├── __init__.py
+│   └── neighbor_list.py
 ├── analyze_and_plot.py
 ├── example
-│   └── POSCAR
+│   └── POSCAR
 ├── LICENSE
 ├── README.md
 ├── requirements.txt
-├── setup.py
-├── upload_pypi.sh
-└── upload_pypi_test.sh
+└── setup.py
 ```
 
-## 安装步骤
-1. 克隆本项目到本地：
-   ```bash
-   git clone https://github.com/wangchr1617/altbc_analyzer.git
-   cd altbc_analyzer
-   ```
+## Installation
 
-2. 安装项目依赖：
-   ```bash
-   pip install -r requirements.txt
-   ```
+### By pip 
 
-## 使用方法
-### 分析和绘图
-在项目根目录下运行`analyze_and_plot.py`文件来进行分析和绘图。以下是主要的函数和它们的功能：
+```shell
+$ pip install altbc_analyzer
+```
 
-- `analyze_file(filename, filetype='POSCAR', cutoff=4.0, theta_min=155, theta_max=180, frame_interval=10)`：分析指定的文件类型，并计算结构文件的ALTBC。
-- `plot_results(df, plot_type='scatter')`：根据分析结果绘制散点图或核密度图。
+### From Source
 
-### 示例
-以下是一个运行示例：
+```bash
+git clone https://github.com/wangchr1617/altbc_analyzer.git
+cd altbc_analyzer
+pip install -r requirements.txt
+```
+
+## Usage
+### Analysis and Plotting
+Run the `analyze_and_plot.py` file in the project root directory for analysis and plotting. Below are the main functions and their features:
+
+- `analyze_file(filename, filetype='POSCAR', cutoff=4.0, theta_min=155, theta_max=180, frame_interval=10)`: Analyzes the specified file type and calculates the ALTBC of the structure file.
+- `plot_results(df, plot_type='scatter')`: Plots scatter or kernel density graphs based on the analysis results.
+
+### Example
+Here is an example of running the script:
 ```bash
 python analyze_and_plot.py
 ```
 
-该命令将分析指定的晶体结构文件并生成相应的绘图结果，保存为`altbc.png`。
+This command will analyze the specified crystal structure file and generate the corresponding plot, saved as `altbc.png`.
 
-## 示例代码片段
+## Example Code Snippet
 ```python
 from altbc_analyzer.altbc_analyzer import ALTBC_Analyzer
 from ase.io import read
@@ -68,12 +70,12 @@ if __name__ == "__main__":
     analyze_and_plot('your_structure_file.vasp')
 ```
 
-## 注意事项
-- 如果要分析的结构文件包含超过1000个原子，建议使用POSCAR文件类型。
-- 确保输入文件的路径和文件名正确。
+## Notes
+- If the structure file to be analyzed contains more than 1000 atoms, it is recommended to use the POSCAR file type.
+- Ensure the input file path and name are correct.
 
-## 贡献
-欢迎提交 Issue 和 Pull Request 来改进本项目。如果有任何问题或建议，请联系项目维护者[邮箱](wangchr1617@gmail.com)。
+## Contribution
+You are welcome to submit Issues and Pull Requests to improve this project. If you have any questions or suggestions, please contact the project maintainer via [email](mailto:wangchr1617@gmail.com).
 
-## 许可证
-本项目基于MIT许可证开源，详情请参阅LICENSE文件。
+## License
+This project is open-sourced under the MIT license. For details, please refer to the LICENSE file.
