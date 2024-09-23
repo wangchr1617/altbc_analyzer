@@ -64,9 +64,9 @@ class NeighborList:
         cell[3] = cell[0] + num_cells[0] * (cell[1] + num_cells[1] * cell[2])
         return cell
 
-    def find_neighbors(self, atoms):
+    def find_neighbors(self, atoms, apply_mic=False):
         """
-        Linear scaling algorithm for neighbor list
+        Linear scaling algorithm for neighbor list with optional Minimum Image Convention (MIC)
         """        
         positions = atoms.get_positions()
         box = atoms.cell.array.flatten()
@@ -80,21 +80,21 @@ class NeighborList:
         cell_count_sum = np.zeros(num_cells[3], dtype=int)
         cell_contents = np.zeros(len(positions), dtype=int)
         i_list, j_list, d_list = [], [], []
-
+    
         for n, r in enumerate(positions):
             cell = self.find_cell(box, thickness, r, cutoff_inverse, num_cells)
             cell_count[cell[3]] += 1
-
+    
         for i in range(1, num_cells[3]):
             cell_count_sum[i] = cell_count_sum[i - 1] + cell_count[i - 1]
-
+    
         cell_count.fill(0)
-
+    
         for n, r in enumerate(positions):
             cell = self.find_cell(box, thickness, r, cutoff_inverse, num_cells)
             cell_contents[cell_count_sum[cell[3]] + cell_count[cell[3]]] = n
             cell_count[cell[3]] += 1
-
+    
         for n1, r1 in enumerate(positions):
             cell = self.find_cell(box, thickness, r1, cutoff_inverse, num_cells)
             for k, j, i in np.ndindex(3, 3, 3):
@@ -107,10 +107,14 @@ class NeighborList:
                     n2 = cell_contents[cell_count_sum[neighbor_cell] + m]
                     if n1 < n2:
                         x12, y12, z12 = positions[n2] - r1
-                        x12, y12, z12 = self.apply_minimum_image_convention(box, x12, y12, z12)
+                        # Apply Minimum Image Convention if apply_mic is True
+                        if apply_mic:
+                            x12, y12, z12 = self.apply_minimum_image_convention(box, x12, y12, z12)
                         d2 = x12 * x12 + y12 * y12 + z12 * z12
                         if d2 < self.cutoff_square:
                             i_list.append(n1)
                             j_list.append(n2)
                             d_list.append(math.sqrt(d2))
+        
         return np.array(i_list), np.array(j_list), np.array(d_list)
+
