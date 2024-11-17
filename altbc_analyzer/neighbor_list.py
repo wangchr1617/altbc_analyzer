@@ -3,9 +3,11 @@ import numpy as np
 
 class NeighborList:
     
-    def __init__(self, cutoff):
+    def __init__(self, cutoff, apply_mic=False, apply_half=False):
         self.cutoff_neighbor = cutoff
         self.cutoff_square = cutoff ** 2
+        self.apply_mic = apply_mic
+        self.apply_half = apply_half
 
     def get_determinant(self, box):
         """
@@ -64,7 +66,7 @@ class NeighborList:
         cell[3] = cell[0] + num_cells[0] * (cell[1] + num_cells[1] * cell[2])
         return cell
 
-    def find_neighbors(self, atoms, apply_mic=False):
+    def find_neighbors(self, atoms):
         """
         Linear scaling algorithm for neighbor list with optional Minimum Image Convention (MIC)
         """        
@@ -105,16 +107,15 @@ class NeighborList:
                     neighbor_cell -= num_cells[3]
                 for m in range(cell_count[neighbor_cell]):
                     n2 = cell_contents[cell_count_sum[neighbor_cell] + m]
-                    if n1 < n2:
+                    if self.apply_half and n1 < n2 or not self.apply_half and n1 != n2:
                         x12, y12, z12 = positions[n2] - r1
-                        # Apply Minimum Image Convention if apply_mic is True
-                        if apply_mic:
+                        if self.apply_mic:
                             x12, y12, z12 = self.apply_minimum_image_convention(box, x12, y12, z12)
                         d2 = x12 * x12 + y12 * y12 + z12 * z12
                         if d2 < self.cutoff_square:
                             i_list.append(n1)
                             j_list.append(n2)
                             d_list.append(math.sqrt(d2))
-        
+                            
         return np.array(i_list), np.array(j_list), np.array(d_list)
-
+        
