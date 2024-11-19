@@ -9,29 +9,28 @@ import sys
 
 class ALTBC_Analyzer:
     
-    def __init__(self, filename, filetype='SingleSystem', frame_interval=10, figname='./altbc.png', center_element=None, xmin=2.5, xmax=3.8, grid_size=0.01, cutoff=4.0, theta_min=155, theta_max=180, apply_mic=False, apply_half=False):
+    def __init__(self, filename, filetype='SingleSystem', frame_interval=10, center_element=None, xmin=2.5, xmax=3.8, grid_size=0.001, cutoff=4.0, theta_min=155, theta_max=180, apply_mic=False, apply_half=False, savegrid=False):
         """
-        初始化ALTBC_Analyzer类的实例。
+        初始化 ALTBC_Analyzer 类的实例。
         
         参数：
-        filename (str): 输入文件的路径
-        filetype (str): 文件类型，支持'SingleSystem'或'MultiSystem'
-        frame_interval (int): 处理的帧间隔（仅适用于'MultiSystem'类型）
-        figname (str): 输出图片的路径
-        center_element (str): 是否要指定中心原子
+        filename (str): 输入结构文件，需要包含晶格信息
+        filetype (str): 文件类型，仅支持 'SingleSystem' 或 'MultiSystem'
+        frame_interval (int): 处理的帧间隔（仅适用于 'MultiSystem' 类型）
+        center_element (str): 是否要指定中心原子元素类型
         xmin (float): 网格的最小值
         xmax (float): 网格的最大值
         grid_size (float): 网格大小
-        cutoff (float): 键合截断距离
-        theta_min (float): 最小角度（用于过滤）
-        theta_max (float): 最大角度（用于过滤）
+        cutoff (float): 原子键合截断距离
+        theta_min (float): ALTBC 最小角度（用于过滤）
+        theta_max (float): ALTBC 最大角度（用于过滤）
         apply_mic (bool): 是否应用最小图像约束
         apply_half (bool): 是否应用半空间约束
+        savegrid (bool): 是否保存画图原始数据
         """
         self.filename = filename
         self.filetype = filetype
         self.frame_interval = frame_interval
-        self.figname = figname
         self.center_element = center_element
         self.nframe = 1
         self.xmin = xmin
@@ -44,10 +43,11 @@ class ALTBC_Analyzer:
         self.theta_max = theta_max
         self.apply_mic = apply_mic
         self.apply_half = apply_half
+        self.savegrid = savegrid
 
     def read_structures(self):
         """
-        读取文件中的结构数据，支持'SingleSystem'和'MultiSystem'。
+        读取文件中的结构数据，支持 'SingleSystem' 和 'MultiSystem' 。
         """
         if self.filetype == 'SingleSystem':
             return [read(self.filename)]
@@ -61,14 +61,14 @@ class ALTBC_Analyzer:
 
     def generate_neighbor_list(self, atoms):
         """
-        生成邻居列表和原子间距离。
+        生成邻居列表和原子间距。
         """
         nl = NeighborList(self.cutoff, self.apply_mic, self.apply_half)
         return nl.find_neighbors(atoms)
 
     def find_triplets_with_distances(self, center_atom_index, neighbor_indices, neighbor_distances, i_list, j_list):
         """
-        查找所有的三元组及其对应的原子间距离。
+        查找所有的三元组及其对应的原子间距。
         """
         triplets = []
         for first_neighbor in neighbor_indices:
@@ -81,7 +81,7 @@ class ALTBC_Analyzer:
 
     def _compute_altbc(self, atoms):
         """
-        计算单个结构的ALTBC值。
+        计算单个结构的 ALTBC 值。
         """
         i_list, j_list, neighbor_distances = self.generate_neighbor_list(atoms) 
         triplets = []
@@ -110,7 +110,7 @@ class ALTBC_Analyzer:
 
     def compute_altbc(self):
         """
-        计算所有帧的ALTBC值。
+        计算所有结构的 ALTBC 值。
         """
         structures = self.read_structures()
         if self.filetype == 'SingleSystem':
@@ -121,7 +121,7 @@ class ALTBC_Analyzer:
 
     def _compute_grid(self, df):
         """
-        根据给定的DataFrame计算并更新网格数据。
+        根据给定的 DataFrame 计算并更新网格数据。
         """
         x = np.array(df["AB"])
         y = np.array(df["BC"])
@@ -136,16 +136,14 @@ class ALTBC_Analyzer:
         
     def compute_grid(self):
         """
-        计算网格，并将结果更新到 `self.grid`（仅适用于'MultiSystem'）。
-        """
-        if self.filetype != 'MultiSystem':
-            print("Error: Invalid filetype. This function can only be called when the filetype is 'MultiSystem'.")
-            sys.exit(1)
-        
+        计算网格，并将结果更新到 `self.grid`。
+        """        
         structures = self.read_structures()
         for structure in structures:
             df = self._compute_altbc(structure)
             self._compute_grid(df)
+        if self.savegrid:
+            np.savetxt("grid.txt", self.grid, fmt = '%f', delimiter = ',')
 
     def _plot_common_settings(self):
         """
@@ -166,11 +164,9 @@ class ALTBC_Analyzer:
         """
         self.compute_grid()
         self.grid = self.grid / np.max(self.grid)
-        plt.figure(figsize=(6, 5))
         plt.imshow(self.grid, origin='lower', extent=(self.xmin, self.xmax, self.xmin, self.xmax), cmap='jet', interpolation='nearest')
         plt.colorbar(label='P(r1,r2)')
         self._plot_common_settings()
-        plt.savefig(self.figname, bbox_inches='tight')
 
     def plot_scatter(self):
         """
@@ -178,8 +174,6 @@ class ALTBC_Analyzer:
         """
         df = self.compute_altbc()
         x, y = np.array(df["AB"]), np.array(df["BC"])
-        plt.figure(figsize=(6, 5))
         scatter = plt.scatter(x, y, s=1)
         self._plot_common_settings()
-        plt.savefig(self.figname, bbox_inches='tight')
         
