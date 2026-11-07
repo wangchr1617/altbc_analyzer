@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "altbc_analyzer"
+version = "0.2.0"
+description = "Periodic angular-limited bond-pair distributions for atomistic structures"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Changrui Wang", email = "wangchr1617@gmail.com"}]
+dependencies = ["ase>=3.23", "numpy>=1.23", "pandas>=1.5", "matplotlib>=3.6", "scipy>=1.9"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.9", "build>=1"]
+
+[project.scripts]
+altbc = "altbc_analyzer.__main__:main"
+
+[project.urls]
+Repository = "https://github.com/wangchr1617/altbc_analyzer"
+
+[tool.setuptools.packages.find]
+include = ["altbc_analyzer*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "B"]

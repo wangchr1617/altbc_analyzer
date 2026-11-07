@@ -1,0 +1,4 @@
+include README.md LICENSE
+recursive-include example *.py *.ipynb POSCAR *.xyz
+recursive-include tests *.py
+prune outputs
