@@ -6,6 +6,16 @@ ALTBC Analyzer is a Python library for angular-limited three-body correlation (A
 
 ALTBC Analyzer 是用于原子结构角度限制三体关联（ALTBC）分析的 Python 库。使用 ASE 读取结构，支持周期晶胞和元素筛选，并可导出高清 PNG 图片。
 
+## Example Results / 结果示例
+
+Ge-centered ALTBC histograms from the bundled structure and the full 200-frame trajectory. Both use a 155–180° angular window, 0.02 Å bins, and maximum-normalized counts without smoothing. Click either image for the 600 dpi original.
+
+以下为示例结构及完整 200 帧轨迹的 Ge 中心 ALTBC 图，角度范围 155–180°、网格宽度 0.02 Å，以最大计数归一化，未经平滑。点击图片可查看 600 dpi 原图。
+
+| Single Structure / 单个结构 | Trajectory / 轨迹 |
+|:---:|:---:|
+| [![Single-structure ALTBC](example/figures/poscar_ge.png)](example/figures/poscar_ge.png) | [![Trajectory ALTBC](example/figures/trajectory_ge.png)](example/figures/trajectory_ge.png) |
+
 ## File Structure / 文件结构
 
 ```text
@@ -17,6 +27,7 @@ altbc_analyzer/
 │   ├── neighbor_list.py
 │   └── plotting.py
 ├── example/
+│   ├── figures/
 │   ├── POSCAR
 │   ├── test.xyz
 │   ├── quickstart.ipynb

@@ -1,16 +1,28 @@
 name: tests
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    name: Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        python: ['3.9', '3.11', '3.13']
+        include:
+          # Python 3.9 is unavailable on newer Ubuntu runner images.
+          - python: '3.9'
+            os: ubuntu-22.04
+          - python: '3.11'
+            os: ubuntu-24.04
+          - python: '3.13'
+            os: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
+      - run: python -m pip install --upgrade pip
       - run: python -m pip install -e '.[dev]'
       - run: ruff check .
       - run: ruff format --check .
